@@ -15,6 +15,89 @@ const profileCard = document.getElementById('profileCard');
 const editCard = document.getElementById('editCard');
 const profilePosts = document.getElementById('profilePosts');
 
+/* ---------- On-page confirm & message boxes (replaces confirm()/alert()) ---------- */
+
+(function injectPopupStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    #confirmBox, #msgBox {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      font-family: inherit;
+    }
+    #confirmBox {
+      display: none;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    #confirmBox p { margin: 0 0 10px; }
+    #confirmBox button {
+      margin: 0 5px;
+      padding: 6px 14px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+    #confirmYes { background: #d9363e; color: #fff; }
+    #confirmNo { background: #eee; color: #333; }
+    #msgBox {
+      display: none;
+      background: #ffe0e0;
+      color: #900;
+      padding: 10px 20px;
+    }
+  `;
+  document.head.appendChild(style);
+
+  const confirmBox = document.createElement('div');
+  confirmBox.id = 'confirmBox';
+  confirmBox.innerHTML = `
+    <p id="confirmText"></p>
+    <button id="confirmYes">Yes</button>
+    <button id="confirmNo">Cancel</button>
+  `;
+  document.body.appendChild(confirmBox);
+
+  const msgBox = document.createElement('div');
+  msgBox.id = 'msgBox';
+  document.body.appendChild(msgBox);
+})();
+
+function showConfirm(message) {
+  return new Promise((resolve) => {
+    const box = document.getElementById('confirmBox');
+    document.getElementById('confirmText').textContent = message;
+    box.style.display = 'block';
+
+    const yesBtn = document.getElementById('confirmYes');
+    const noBtn = document.getElementById('confirmNo');
+
+    const cleanup = (result) => {
+      box.style.display = 'none';
+      yesBtn.onclick = null;
+      noBtn.onclick = null;
+      resolve(result);
+    };
+
+    yesBtn.onclick = () => cleanup(true);
+    noBtn.onclick = () => cleanup(false);
+  });
+}
+
+function showMessage(message) {
+  const box = document.getElementById('msgBox');
+  box.textContent = message;
+  box.style.display = 'block';
+  setTimeout(() => { box.style.display = 'none'; }, 3000);
+}
+
 function profileCardHtml(user, isFollowing) {
   return `
     <div class="profile-header">
@@ -84,7 +167,7 @@ async function loadProfile() {
           e.target.textContent = result.following ? 'Unfollow' : 'Follow';
           e.target.classList.toggle('secondary', result.following);
         } catch (err) {
-          alert(err.message);
+          showMessage(err.message);
         }
       });
     }
@@ -112,7 +195,7 @@ document.getElementById('saveProfileBtn').addEventListener('click', async () => 
     editCard.classList.add('hidden');
     loadProfile();
   } catch (err) {
-    alert(err.message);
+    showMessage(err.message);
   }
 });
 
@@ -127,17 +210,18 @@ profilePosts.addEventListener('click', async (e) => {
       likeBtn.innerHTML = `${result.liked ? '♥' : '♡'} <span class="like-count">${result.likesCount}</span>`;
       likeBtn.classList.toggle('liked', result.liked);
     } catch (err) {
-      alert(err.message);
+      showMessage(err.message);
     }
   }
 
   if (deleteBtn) {
-    if (!confirm('Delete this post?')) return;
+    const ok = await showConfirm('Delete this post?');
+    if (!ok) return;
     try {
       await apiRequest(`/posts/${deleteBtn.dataset.id}`, { method: 'DELETE', auth: true });
       loadProfile();
     } catch (err) {
-      alert(err.message);
+      showMessage(err.message);
     }
   }
 });
