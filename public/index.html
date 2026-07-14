@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Social - Sign in</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-wrap">
+  <h1>MiniSocial</h1>
+  <p class="tagline">Share posts, follow people, join the conversation.</p>
+
+  <div class="auth-toggle">
+    <button id="tabLogin" class="active">Login</button>
+    <button id="tabRegister">Register</button>
+  </div>
+
+  <div class="card">
+    <!-- Login form -->
+    <form id="loginForm">
+      <div class="error-msg" id="loginError"></div>
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+
+    <!-- Register form -->
+    <form id="registerForm" class="hidden">
+      <div class="error-msg" id="registerError"></div>
+      <input type="text" id="registerUsername" placeholder="Username" minlength="3" maxlength="20" required>
+      <input type="email" id="registerEmail" placeholder="Email" required>
+      <input type="password" id="registerPassword" placeholder="Password (min 6 characters)" minlength="6" required>
+      <button type="submit">Create account</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+  // If already logged in, go straight to the feed
+  if (getToken()) window.location.href = 'feed.html';
+
+  const tabLogin = document.getElementById('tabLogin');
+  const tabRegister = document.getElementById('tabRegister');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+
+  tabLogin.addEventListener('click', () => {
+    tabLogin.classList.add('active');
+    tabRegister.classList.remove('active');
+    loginForm.classList.remove('hidden');
+    registerForm.classList.add('hidden');
+  });
+
+  tabRegister.addEventListener('click', () => {
+    tabRegister.classList.add('active');
+    tabLogin.classList.remove('active');
+    registerForm.classList.remove('hidden');
+    loginForm.classList.add('hidden');
+  });
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('loginError');
+    errorEl.textContent = '';
+    try {
+      const data = await apiRequest('/auth/login', {
+        method: 'POST',
+        body: {
+          email: document.getElementById('loginEmail').value.trim(),
+          password: document.getElementById('loginPassword').value,
+        },
+      });
+      saveSession(data.token, data.user);
+      window.location.href = 'feed.html';
+    } catch (err) {
+      errorEl.textContent = err.message;
+    }
+  });
+
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('registerError');
+    errorEl.textContent = '';
+    try {
+      const data = await apiRequest('/auth/register', {
+        method: 'POST',
+        body: {
+          username: document.getElementById('registerUsername').value.trim(),
+          email: document.getElementById('registerEmail').value.trim(),
+          password: document.getElementById('registerPassword').value,
+        },
+      });
+      saveSession(data.token, data.user);
+      window.location.href = 'feed.html';
+    } catch (err) {
+      errorEl.textContent = err.message;
+    }
+  });
+</script>
+</body>
+</html>

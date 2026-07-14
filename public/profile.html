@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Social - Profile</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">MiniSocial</div>
+  <nav>
+    <a href="feed.html">Feed</a>
+    <a href="#" id="myProfileLink">Profile</a>
+    <button class="secondary small" id="logoutBtn">Logout</button>
+  </nav>
+</div>
+
+<div class="container">
+  <div class="card" id="profileCard">
+    <p class="muted">Loading profile...</p>
+  </div>
+
+  <div class="card hidden" id="editCard">
+    <h3>Edit profile</h3>
+    <textarea id="editBio" placeholder="Bio" maxlength="160"></textarea>
+    <input type="url" id="editAvatar" placeholder="Avatar image URL (optional)">
+    <button id="saveProfileBtn">Save</button>
+  </div>
+
+  <h3>Posts</h3>
+  <div id="profilePosts"></div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>
