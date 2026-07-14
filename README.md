@@ -154,16 +154,16 @@ free plan.
 
 ## 📸 Screenshots
 
-### 🏠 Registration Page
+###  Registration Page
 ![Registration Page](screenshots/register.png)
 
-### 🔐 Login Page
+### Login Page
 ![Login Page](screenshots/login.png)
 
-### 🛍️ Profile Page
+### Profile Page
 ![Profile Page](screenshots/profile.png)
 
-### 🛒 Feed
+### Feed
 ![Feed Page](screenshots/feed.png)
 
 
