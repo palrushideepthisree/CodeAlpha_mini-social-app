@@ -151,6 +151,22 @@ free plan.
   Feel free to extend it.
 - Never commit your real `.env` file — it's already listed in `.gitignore`.
 
+
+## 📸 Screenshots
+
+### 🏠 Registration Page
+![Registration Page](screenshots/register.png)
+
+### 🔐 Login Page
+![Login Page](screenshots/login.png)
+
+### 🛍️ Profile Page
+![Profile Page](screenshots/profile.png)
+
+### 🛒 Feed
+![Feed Page](screenshots/feed.png)
+
+
 ## 🔗 Links
 
 **GitHub Repository:**
