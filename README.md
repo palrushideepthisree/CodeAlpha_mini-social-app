@@ -151,7 +151,24 @@ free plan.
   Feel free to extend it.
 - Never commit your real `.env` file — it's already listed in `.gitignore`.
 
-## Author 
+## 🔗 Links
+
+**GitHub Repository:**
+https://github.com/palrushideepthisree/CodeAlpha_mini-social-app
+
+**Live Demo:**
+https://codealpha-mini-social-app.onrender.com
+
+## 👨‍💻 Author
+
 **Deepthi Sree**
+
+GitHub: https://github.com/palrushideepthisree
+
+LinkedIn: https://www.linkedin.com/in/deepthisreepalrushi
+
+---
+⭐ If you like this project, consider giving it a star!
+
 
 
